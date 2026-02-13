@@ -68,28 +68,28 @@ int main(int argc, char* argv[]) {
         printf("Auto shutter FFC disabled...\n");
     }
 
-    // Set frame rate
-    ret = adv_output_frame_rate_set(ircmd_handle, ADV_HIGH_RATE); // 60 fps
-    if (ret != IRLIB_SUCCESS) {
-        printf("Could not set frame rate to 60Hz\n");
-    }
-    else {
-        printf("Set frame rate to 60Hz\n");
-    }
+    // // Set frame rate
+    // ret = adv_output_frame_rate_set(ircmd_handle, ADV_HIGH_RATE); // 60 fps
+    // if (ret != IRLIB_SUCCESS) {
+    //     printf("Could not set frame rate to 60Hz\n");
+    // }
+    // else {
+    //     printf("Set frame rate to 60Hz\n");
+    // }
 
-    ret = adv_yuv_format_set(ircmd_handle, 3);
+    // ret = adv_yuv_format_set(ircmd_handle, 3);
 
-    VideoOutputInfo_t voi;
-    ret = adv_digital_video_output_get(ircmd_handle, &voi);
-    voi.video_output_mode = MODE_HG_60HZ_IMG;
-    voi.video_output_fps = 60;
-    ret = adv_digital_video_output_set(ircmd_handle, voi);
-    printf("Video output format: %d\n", voi.video_output_fps);
+    // VideoOutputInfo_t voi;
+    // ret = adv_digital_video_output_get(ircmd_handle, &voi);
+    // voi.video_output_mode = MODE_HG_60HZ_IMG;
+    // voi.video_output_fps = 60;
+    // ret = adv_digital_video_output_set(ircmd_handle, voi);
+    // printf("Video output format: %d\n", voi.video_output_fps);
 
 
-    int pal_n;
-    ret = basic_palette_num_get(ircmd_handle, &pal_n);
-    printf("palette number: %d\n", pal_n);
+    // int pal_n;
+    // ret = basic_palette_num_get(ircmd_handle, &pal_n);
+    // printf("palette number: %d\n", pal_n);
 
 
     // Cleanup
