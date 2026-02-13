@@ -1,6 +1,6 @@
 usb_cam:
   ros__parameters:
-    video_device: "/dev/video0"
+    video_device: "/dev/video4"
     framerate: 30.0
     io_method: "mmap"
     frame_id: "ir_camera"
