@@ -5,6 +5,9 @@ build*
 .idea
 .venv
 
+install*
+log*
+
 *.bak
 *#
 .#*
