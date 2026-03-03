@@ -18,7 +18,7 @@ def generate_launch_description():
         output='screen',
         parameters=[config]
     )
-
+    
     ld = LaunchDescription([node])
 
     return ld

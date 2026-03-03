@@ -55,3 +55,6 @@ moc_*
 .cache
 .clang-format
 .clang-tidy
+
+# rosbags
+scripts/ir_image_bag*/
