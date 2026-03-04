@@ -58,9 +58,20 @@ int main(int argc, char* argv[]) {
         goto fail;
     }
     printf("Device Name: %s\n", data);
+    
+    // while (true) {
+    //     ret = basic_ffc_update(ircmd_handle);
+    //     if (ret != IRLIB_SUCCESS) {
+    //         printf("Could not shutter\n");
+    //     }
+    //     else {
+    //         printf("Shutter...\n");
+    //     }
+    // }
 
     // Disable auto FFC shutter
-    ret = basic_auto_ffc_status_set(ircmd_handle, BASIC_AUTO_FFC_DISABLE);
+    // ret = basic_auto_ffc_status_set(ircmd_handle, BASIC_AUTO_FFC_DISABLE);
+    ret = adv_shutter_tab_open(ircmd_handle);
     if (ret != IRLIB_SUCCESS) {
         printf("Could not disable auto shutter\n");
     }
