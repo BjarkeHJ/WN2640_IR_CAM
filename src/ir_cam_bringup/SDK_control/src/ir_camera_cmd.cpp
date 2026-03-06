@@ -6,6 +6,8 @@
 
 int main(int argc, char* argv[]) {
 
+    bool set_params = true;
+
     // Register library logs and set log level to ERROR
     ircam_log_register(IRCAM_LOG_ERROR, NULL, NULL);
     ircmd_log_register(IRCMD_LOG_ERROR, NULL, NULL);
@@ -21,9 +23,8 @@ int main(int argc, char* argv[]) {
     // Serial port parameters (Should be read from config)
     UartConDevParams_t param = {0};
     char uart_data[20] = "/dev/ttyUSB0";        // Serial Port
-    char data[100] = {0};                       // Used to store queried information
     param.baudrate = 115200;                    // Baudrate
-    
+
     // Create control handle
     ir_control_handle_create(&ir_control_handle);
 
@@ -49,8 +50,8 @@ int main(int argc, char* argv[]) {
     ircmd_handle = ircmd_create_handle(ir_control_handle);
 
     // --------- RUN START UP COMMANDS FOR THE IRCAM ---------
-    
     // Get device name (WhoAmI)
+    char data[100];
     ret = basic_device_info_get(ircmd_handle, BASIC_DEV_NAME, data);
     if (ret != IRLIB_SUCCESS) {
         printf("UART Communication failed (WhoAmI)\n");
@@ -58,50 +59,25 @@ int main(int argc, char* argv[]) {
         goto fail;
     }
     printf("Device Name: %s\n", data);
-    
-    // while (true) {
-    //     ret = basic_ffc_update(ircmd_handle);
-    //     if (ret != IRLIB_SUCCESS) {
-    //         printf("Could not shutter\n");
-    //     }
-    //     else {
-    //         printf("Shutter...\n");
-    //     }
-    // }
 
-    // Disable auto FFC shutter
-    // ret = basic_auto_ffc_status_set(ircmd_handle, BASIC_AUTO_FFC_DISABLE);
-    ret = adv_shutter_tab_open(ircmd_handle);
-    if (ret != IRLIB_SUCCESS) {
-        printf("Could not disable auto shutter\n");
-    }
-    else {
-        printf("Auto shutter FFC disabled...\n");
+    if (set_params) {
+        // Auto shutter status
+        ret = basic_auto_ffc_status_set(ircmd_handle, BASIC_AUTO_FFC_ENABLE);
+        
+        // 
+
+        // Save parameters
+        ret = basic_save_data(ircmd_handle, BASIC_SAVE_SYSTEM_PARAMETERS);
     }
 
-    // // Set frame rate
-    // ret = adv_output_frame_rate_set(ircmd_handle, ADV_HIGH_RATE); // 60 fps
-    // if (ret != IRLIB_SUCCESS) {
-    //     printf("Could not set frame rate to 60Hz\n");
-    // }
-    // else {
-    //     printf("Set frame rate to 60Hz\n");
-    // }
 
-    // ret = adv_yuv_format_set(ircmd_handle, 3);
-
-    // VideoOutputInfo_t voi;
-    // ret = adv_digital_video_output_get(ircmd_handle, &voi);
-    // voi.video_output_mode = MODE_HG_60HZ_IMG;
-    // voi.video_output_fps = 60;
-    // ret = adv_digital_video_output_set(ircmd_handle, voi);
-    // printf("Video output format: %d\n", voi.video_output_fps);
+    int ffc_stat;
+    ret = basic_auto_ffc_status_get(ircmd_handle, &ffc_stat);
+    printf("FFC STATUS: %d\n", ffc_stat);
 
 
-    // int pal_n;
-    // ret = basic_palette_num_get(ircmd_handle, &pal_n);
-    // printf("palette number: %d\n", pal_n);
 
+    ret = basic_ffc_update(ircmd_handle);
 
     // Cleanup
     ir_control_handle->ir_control_release(ir_control_handle->ir_control_handle, (void*)(&param));
