@@ -13,9 +13,9 @@ class ParamConfig : public rclcpp::Node
 
         // --------- READ AND GET PARAMETERS ---------
 
-        this->declare_parameter("set_params", false);               // if set to false, the parameters will only be displayed
-        this->declare_parameter("set_shutter", false);              // set auto shutter parameters
-        this->declare_parameter("set_filter", false);               //set filter parameters / algorithm parameters
+        this->declare_parameter("set_params", true);               // if set to false, the parameters will only be displayed
+        this->declare_parameter("set_shutter", true);              // set auto shutter parameters
+        this->declare_parameter("set_filter", true);               //set filter parameters / algorithm parameters
         this->declare_parameter("save_shutter",false);              //save shutter config
         this->declare_parameter("save_filter",false);               //save filter config
         
@@ -28,7 +28,7 @@ class ParamConfig : public rclcpp::Node
         this->declare_parameter("image_noise_reduction_level", 50); //detail enhance level (0-100)
         this->declare_parameter("time_noise_reduction_level", 50);  //time noise reduction level (0-100)
         this->declare_parameter("space_noise_reduction_level", 50); //space noise reduction level (0-100)
-        this->declare_parameter("edge_enhance_level", 50);          //edge enhancement level (0-100)
+        this->declare_parameter("edge_enhance_level", 0);          //edge enhancement level (0-100)
         this->declare_parameter("image_scene_mode", 0);             //image scene mode (0 is default mode)
 
         // Params for setting          
@@ -171,8 +171,8 @@ class ParamConfig : public rclcpp::Node
                 ret = basic_space_noise_reduce_level_set(ircmd_handle, p_space_noise_reduction_level);
 
                 // Edge Enhancement Level
-                printf("- Edge Enhancement Level\n");
-                ret = adv_edge_enhance_set(ircmd_handle, p_edge_enhance_level);
+                // printf("- Edge Enhancement Level\n");
+                // ret = adv_edge_enhance_set(ircmd_handle, p_edge_enhance_level);
                 
                 // Image Scene Mode
                 printf("- Image Scene Mode\n");
