@@ -13,15 +13,23 @@ class ParamConfig : public rclcpp::Node
 
         // --------- READ AND GET PARAMETERS ---------
 
-        this->declare_parameter("set_params", false); // if set to false, the parameters will only be displayed
-        this->declare_parameter("set_shutter", false); // set auto shutter parameters
-        this->declare_parameter("set_filter", false); //set filter parameters / algorithm parameters
-        this->declare_parameter("save_shutter",false); //save shutter config
-        this->declare_parameter("save_filter",false); //save filter config
-        this->declare_parameter("uart_data", "/dev/ttyUSB0"); // The IR cameras USB port
-        this->declare_parameter("baudrate", 115200); //baudrate for communication channel
-        this->declare_parameter("auto_ffc_shutter", 0); //baudrate for communication channel
-        // this->declare_parameter("auto_ffc_shutter", 0); //baudrate for communication channel
+        this->declare_parameter("set_params", false);               // if set to false, the parameters will only be displayed
+        this->declare_parameter("set_shutter", false);              // set auto shutter parameters
+        this->declare_parameter("set_filter", false);               //set filter parameters / algorithm parameters
+        this->declare_parameter("save_shutter",false);              //save shutter config
+        this->declare_parameter("save_filter",false);               //save filter config
+        
+        this->declare_parameter("uart_data", "/dev/ttyUSB0");       // The IR cameras USB port
+        this->declare_parameter("baudrate", 115200);                //baudrate for communication channel
+        
+        this->declare_parameter("auto_ffc_shutter", 0);                 //baudrate for communication channel
+        
+        this->declare_parameter("image_detail_enhance_level", 50);  //detail enhance level (0-100)
+        this->declare_parameter("image_noise_reduction_level", 50); //detail enhance level (0-100)
+        this->declare_parameter("time_noise_reduction_level", 50);  //time noise reduction level (0-100)
+        this->declare_parameter("space_noise_reduction_level", 50); //space noise reduction level (0-100)
+        this->declare_parameter("edge_enhance_level", 50);          //edge enhancement level (0-100)
+        this->declare_parameter("image_scene_mode", 0);             //image scene mode (0 is default mode)
 
         // Params for setting          
         bool p_set_params = this->get_parameter("set_params").as_bool();
@@ -38,8 +46,13 @@ class ParamConfig : public rclcpp::Node
         int p_auto_ffc_shutter = this->get_parameter("auto_ffc_shutter").as_int();
 
         //Params for filter/algorithm configuration
-
-
+        int p_image_detail_enhance_level = this->get_parameter("image_detail_enhance_level").as_int();
+        int p_image_noise_reduction_level = this->get_parameter("image_noise_reduction_level").as_int();
+        int p_time_noise_reduction_level = this->get_parameter("time_noise_reduction_level").as_int();
+        int p_space_noise_reduction_level = this->get_parameter("space_noise_reduction_level").as_int();
+        int p_edge_enhance_level = this->get_parameter("edge_enhance_level").as_int();
+        int p_image_scene_mode = this->get_parameter("image_scene_mode").as_int();
+        
 
         // --------- RUN CODE (FOR UART CONTROL) ---------
 
@@ -99,10 +112,34 @@ class ParamConfig : public rclcpp::Node
 
         // --------- PRINT CURRENT CONFIGURATION ---------
         printf("\n---------- CURRENT CONFIGURATION ----------\n");
+        
         int ffc_stat;
         ret = basic_auto_ffc_status_get(ircmd_handle, &ffc_stat);
         printf("FFC STATUS: %d\n", ffc_stat);
+        
+        int current_detail_enhance_level;
+        ret = basic_current_detail_enhance_level_get(ircmd_handle, &current_detail_enhance_level);
+        printf("DETAIL ENCHANCE LEVEL: %d\n", current_detail_enhance_level);
+        
+        int current_image_noise_reduction_level;
+        ret = basic_current_image_noise_reduction_level_get(ircmd_handle, &current_image_noise_reduction_level);
+        printf("IMAGE NOISE REDUCTION LEVEL: %d\n", current_image_noise_reduction_level);
 
+        int current_time_noise_reduction_level;
+        ret = basic_time_noise_reduce_level_get(ircmd_handle, &current_image_noise_reduction_level);
+        printf("TIME NOISE REDUCTION LEVEL: %d\n", current_time_noise_reduction_level);
+
+        int current_space_noise_reduction_level;
+        ret = basic_space_noise_reduce_level_get(ircmd_handle, &current_space_noise_reduction_level);
+        printf("SPACE NOISE REDUCTION LEVEL: %d\n", current_space_noise_reduction_level);
+
+        int edge_enhance_level;
+        ret = adv_edge_enhance_get(ircmd_handle, &edge_enhance_level);
+        printf("EDGE ENHANCE LEVEL: %d\n", edge_enhance_level);
+
+        int current_image_scene_mode;
+        ret = basic_current_image_scene_mode_get(ircmd_handle, &current_image_scene_mode);
+        printf("IMAGE SCENE MODE: %d\n", current_image_scene_mode);
 
 
         // --------- SETTING PARAMETERS ---------
@@ -112,15 +149,66 @@ class ParamConfig : public rclcpp::Node
             if (p_set_shutter){
 
 
-                // Auto shutter status
+                // Auto Shutter Status
                 printf("- Auto Shutter Status\n");
                 ret = basic_auto_ffc_status_set(ircmd_handle, p_auto_ffc_shutter);
             }
             if (p_set_filter){
-                // EXAMPLE Filter Param 1
-                printf("- Filter Param 1\n");
-                //ret = param_1_set(ircmd_handle, p_param_1);
+                // Detail Enhance Level
+                printf("- Detail Enhance Level\n");
+                ret = basic_image_detail_enhance_level_set(ircmd_handle, p_image_detail_enhance_level);
+
+                // Image Noise Reduction
+                printf("- Image Noise Reduction Level\n");
+                ret = basic_image_noise_reduction_level_set(ircmd_handle, p_image_noise_reduction_level);
+
+                // Time Noise Reduction
+                printf("- Time Noise Reduction Level\n");
+                ret = basic_time_noise_reduce_level_set(ircmd_handle, p_time_noise_reduction_level);
+
+                // Space Noise Reduction
+                printf("- Space Noise Reduction Level\n");
+                ret = basic_space_noise_reduce_level_set(ircmd_handle, p_space_noise_reduction_level);
+
+                // Edge Enhancement Level
+                printf("- Edge Enhancement Level\n");
+                ret = adv_edge_enhance_set(ircmd_handle, p_edge_enhance_level);
+                
+                // Image Scene Mode
+                printf("- Image Scene Mode\n");
+                ret = basic_image_scene_mode_set(ircmd_handle, p_image_scene_mode);
             }
+
+            // Printing parameters after changes
+            printf("\n---------- AFTER CONFIGURATION ----------\n");
+            
+            int ffc_stat;
+            ret = basic_auto_ffc_status_get(ircmd_handle, &ffc_stat);
+            printf("FFC STATUS: %d\n", ffc_stat);
+            
+            int current_detail_enhance_level;
+            ret = basic_current_detail_enhance_level_get(ircmd_handle, &current_detail_enhance_level);
+            printf("DETAIL ENCHANCE LEVEL: %d\n", current_detail_enhance_level);
+            
+            int current_image_noise_reduction_level;
+            ret = basic_current_image_noise_reduction_level_get(ircmd_handle, &current_image_noise_reduction_level);
+            printf("IMAGE NOISE REDUCTION LEVEL: %d\n", current_image_noise_reduction_level);
+
+            int current_time_noise_reduction_level;
+            ret = basic_time_noise_reduce_level_get(ircmd_handle, &current_image_noise_reduction_level);
+            printf("TIME NOISE REDUCTION LEVEL: %d\n", current_time_noise_reduction_level);
+
+            int current_space_noise_reduction_level;
+            ret = basic_space_noise_reduce_level_get(ircmd_handle, &current_space_noise_reduction_level);
+            printf("SPACE NOISE REDUCTION LEVEL: %d\n", current_space_noise_reduction_level);
+
+            int edge_enhance_level;
+            ret = adv_edge_enhance_get(ircmd_handle, &edge_enhance_level);
+            printf("EDGE ENHANCE LEVEL: %d\n", edge_enhance_level);
+
+            int current_image_scene_mode;
+            ret = basic_current_image_scene_mode_get(ircmd_handle, &current_image_scene_mode);
+            printf("IMAGE SCENE MODE: %d\n", current_image_scene_mode);
 
 
             if (p_set_shutter && p_save_shutter){
@@ -130,12 +218,10 @@ class ParamConfig : public rclcpp::Node
                 }
             
             if (p_set_filter && p_save_filter){
-                printf("SAVING FILTER/ALGO CONFIGURATION\n");
+                printf("SAVING FILTER/ALGORITHM CONFIGURATION\n");
                     // Save filter/algorithm parameters
                     ret = basic_save_data(ircmd_handle, BASIC_SAVE_ALGORITHM_PARAMETERS);
             }
-            
-            // Printing parameters after changes
         }
 
 
