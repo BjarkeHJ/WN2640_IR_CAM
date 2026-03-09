@@ -50,7 +50,7 @@ class ParamConfig : public rclcpp::Node
 
         // All handles used
         IrControlHandle_t* ir_control_handle = NULL;
-        // IruartHandle_t* iruart_handle = NULL;
+        IruartHandle_t* iruart_handle = NULL;
         IrcmdHandle_t* ircmd_handle = NULL;
 
         int ret = IRLIB_SUCCESS;
@@ -65,8 +65,8 @@ class ParamConfig : public rclcpp::Node
         ir_control_handle_create(&ir_control_handle);
 
         // Create UART control handle
-        // iruart_handle = iruart_handle_create(ir_control_handle);
-        (void)iruart_handle_create(ir_control_handle);
+        iruart_handle = iruart_handle_create(ir_control_handle);
+        (void)iruart_handle;
 
         // Open and initialize device
         ret = ir_control_handle->ir_control_open(ir_control_handle->ir_control_handle, (void*)(&uart_data));
