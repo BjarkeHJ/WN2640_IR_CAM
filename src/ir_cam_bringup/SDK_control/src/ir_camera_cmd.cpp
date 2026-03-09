@@ -16,8 +16,7 @@ class ParamConfig : public rclcpp::Node
         this->declare_parameter("set_params", true);               // if set to false, the parameters will only be displayed
         this->declare_parameter("set_shutter", true);              // set auto shutter parameters
         this->declare_parameter("set_filter", true);               //set filter parameters / algorithm parameters
-        this->declare_parameter("save_shutter",false);              //save shutter config
-        this->declare_parameter("save_filter",false);               //save filter config
+        this->declare_parameter("save_params",false);              //save shutter config
         
         this->declare_parameter("uart_data", "/dev/ttyUSB0");       // The IR cameras USB port
         this->declare_parameter("baudrate", 115200);                //baudrate for communication channel
@@ -35,8 +34,7 @@ class ParamConfig : public rclcpp::Node
         bool p_set_params = this->get_parameter("set_params").as_bool();
         bool p_set_shutter = this->get_parameter("set_shutter").as_bool();
         bool p_set_filter = this->get_parameter("set_filter").as_bool();
-        bool p_save_shutter = this->get_parameter("save_shutter").as_bool();
-        bool p_save_filter = this->get_parameter("save_filter").as_bool();
+        bool p_save_params = this->get_parameter("save_params").as_bool();
 
         //Params for getting camera control
         std::string p_uart_data = this->get_parameter("uart_data").as_string();
@@ -211,17 +209,11 @@ class ParamConfig : public rclcpp::Node
             printf("IMAGE SCENE MODE: %d\n", current_image_scene_mode);
 
 
-            if (p_set_shutter && p_save_shutter){
+            if (p_set_shutter && p_save_params){
                     printf("SAVING SHUTTER CONFIGURATION\n");
                     // Save shutter parameters
                     ret = basic_save_data(ircmd_handle, BASIC_SAVE_SYSTEM_PARAMETERS);
                 }
-            
-            if (p_set_filter && p_save_filter){
-                printf("SAVING FILTER/ALGORITHM CONFIGURATION\n");
-                    // Save filter/algorithm parameters
-                    ret = basic_save_data(ircmd_handle, BASIC_SAVE_ALGORITHM_PARAMETERS);
-            }
         }
 
 
