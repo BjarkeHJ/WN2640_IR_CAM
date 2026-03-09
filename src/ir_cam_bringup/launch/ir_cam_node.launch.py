@@ -8,13 +8,13 @@ def generate_launch_description():
     config = os.path.join(
         get_package_share_directory('ir_cam_bringup'),
         'config',
-        'ir_cam_params.yaml'
+        'config_ir_params.yaml'
     )
 
     node = Node(
-        package='usb_cam',
-        executable='usb_cam_node_exe',
-        name='usb_cam',
+        package='ir_cam_bringup',
+        executable='ir_cmd_uart',
+        name='ir_cmd_uart',
         output='screen',
         parameters=[config]
     )
