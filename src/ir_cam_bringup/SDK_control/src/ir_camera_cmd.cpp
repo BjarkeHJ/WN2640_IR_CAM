@@ -57,8 +57,8 @@ class ParamConfig : public rclcpp::Node
 
         // Serial port parameters (Read from params above)
         UartConDevParams_t param = {0};
-        // char uart_data[20] = {*p_uart_data.c_str()};        // Serial Port
-        char uart_data[20] = "/dev/ttyUSB0";        // Serial Port
+        char uart_data[20] = {*p_uart_data.c_str()};        // Serial Port
+        // char uart_data[20] = "/dev/ttyUSB0";        // Serial Port
         param.baudrate = p_baudrate;             // Baudrate
         
 
