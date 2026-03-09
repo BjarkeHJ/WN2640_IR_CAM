@@ -8,7 +8,7 @@ ir_cmd_uart:
     baudrate: 115200                    #baudrate for communication channel
     auto_ffc_shutter: 0                 #auto shutter status
     image_detail_enhance_level: 0
-    image_noise_reduction_level: 100
+    image_noise_reduction_level: 0
     time_noise_reduction_level: 0
     space_noise_reduction_level: 100
     edge_enhance_level: 0
