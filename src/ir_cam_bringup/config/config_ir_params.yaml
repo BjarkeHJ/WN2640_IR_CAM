@@ -1,8 +1,8 @@
 usb_cam:
   ros__parameters:
-    set_params: false                   #enable writing of params. If false, the current parameters are simply printed.
-    set_shutter: false                  #set auto shutter parameters
-    set_filter: false                   #set filter parameters / algorithm parameters
+    set_params: true                    #enable writing of params. If false, the current parameters are simply printed.
+    set_shutter: true                   #set auto shutter parameters
+    set_filter: true                    #set filter parameters / algorithm parameters
     save_shutter: false                 #save shutter config
     save_filter: false                  #save filter config
     uart_data: "/dev/ttyUSB0"           #The IR cameras USB port
@@ -12,7 +12,7 @@ usb_cam:
     image_noise_reduction_level: 50
     time_noise_reduction_level: 50
     space_noise_reduction_level: 50
-    edge_enhance_level: 50
+    edge_enhance_level: 0
     image_scene_mode: 0
 
 
