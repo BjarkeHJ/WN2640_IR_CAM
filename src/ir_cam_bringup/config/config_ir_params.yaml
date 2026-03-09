@@ -1,0 +1,11 @@
+usb_cam:
+  ros__parameters:
+    set_params: false           #enable writing of params. If false, the current parameters are simply printed.
+    set_shutter: false          #set auto shutter parameters
+    set_filter: false           #set filter parameters / algorithm parameters
+    save_shutter: false         #save shutter config
+    save_filter: false          #save filter config
+    uart_data: "/dev/ttyUSB0"   #The IR cameras USB port
+    baudrate: 115200            #baudrate for communication channel
+    auto_ffc_shutter: 0         #auto shutter status
+
