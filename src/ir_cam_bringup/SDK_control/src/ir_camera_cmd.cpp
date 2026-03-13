@@ -145,8 +145,6 @@ class ParamConfig : public rclcpp::Node
         if (p_set_params) {
             printf("SETTING PARAMETERS: \n");
             if (p_set_shutter){
-
-
                 // Auto Shutter Status
                 printf("- Auto Shutter Status\n");
                 ret = basic_auto_ffc_status_set(ircmd_handle, p_auto_ffc_shutter);
