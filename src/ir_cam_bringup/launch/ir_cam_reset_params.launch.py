@@ -8,7 +8,7 @@ def generate_launch_description():
     config = os.path.join(
         get_package_share_directory('ir_cam_bringup'),
         'config',
-        'config_ir_params.yaml',
+        'reset_to_default_params.yaml'
     )
 
     node = Node(
