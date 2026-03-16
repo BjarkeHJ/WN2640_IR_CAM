@@ -1,12 +1,14 @@
 ir_cmd_uart:
   ros__parameters:
-    set_params: true                   #enable writing of params. If false, the current parameters are simply printed.
-    set_shutter: true                  #set auto shutter parameters
-    set_filter: true                  #set filter parameters / algorithm parameters
-    save_params: true                #save shutter config
-    uart_data: "/dev/ttyUSB0"           #The IR cameras USB port
+    set_params: true                    #enable writing of params. If false, the current parameters are simply printed.
+    set_shutter: true                   #set auto shutter parameters
+    set_fps: true                       #set fps parameter
+    set_filter: true                    #set filter parameters / algorithm parameters
+    save_params: true                   #save shutter config
+    uart_data: "/dev/ttyHS1"            #The board UART peripherial (/dev/ttyUSB0 for uart-usb adapter)
     baudrate: 115200                    #baudrate for communication channel
-    auto_ffc_shutter: 0                 #auto shutter status
+    auto_ffc_shutter: 1                 #auto shutter status
+    fps: 30                             #30 default
     image_detail_enhance_level: 50
     image_noise_reduction_level: 50
     time_noise_reduction_level: 0

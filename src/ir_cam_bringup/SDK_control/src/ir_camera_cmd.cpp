@@ -7,7 +7,6 @@
 
 class ParamConfig : public rclcpp::Node
 {
-
     public: ParamConfig(): Node("Ir_param_config_node")
     {
 
@@ -15,14 +14,16 @@ class ParamConfig : public rclcpp::Node
 
         this->declare_parameter("set_params", true);               // if set to false, the parameters will only be displayed
         this->declare_parameter("set_shutter", true);              // set auto shutter parameters
+        this->declare_parameter("set_fps", true);              // set fps parameter
         this->declare_parameter("set_filter", true);               //set filter parameters / algorithm parameters
         this->declare_parameter("save_params",false);              //save shutter config
         
-        this->declare_parameter("uart_data", "/dev/ttyUSB0");       // The IR cameras USB port
+        this->declare_parameter("uart_data", "/dev/ttyHS1");       // The IR cameras USB port
         this->declare_parameter("baudrate", 115200);                //baudrate for communication channel
         
         this->declare_parameter("auto_ffc_shutter", 0);                 //baudrate for communication channel
         
+        this->declare_parameter("fps", 30);                         // frame rate (30 or 60)
         this->declare_parameter("image_detail_enhance_level", 50);  //detail enhance level (0-100)
         this->declare_parameter("image_noise_reduction_level", 50); //detail enhance level (0-100)
         this->declare_parameter("time_noise_reduction_level", 50);  //time noise reduction level (0-100)
@@ -33,6 +34,7 @@ class ParamConfig : public rclcpp::Node
         // Params for setting          
         bool p_set_params = this->get_parameter("set_params").as_bool();
         bool p_set_shutter = this->get_parameter("set_shutter").as_bool();
+        bool p_set_fps = this->get_parameter("set_fps").as_bool();
         bool p_set_filter = this->get_parameter("set_filter").as_bool();
         bool p_save_params = this->get_parameter("save_params").as_bool();
 
@@ -42,6 +44,9 @@ class ParamConfig : public rclcpp::Node
 
         //Params for shutter configuration
         int p_auto_ffc_shutter = this->get_parameter("auto_ffc_shutter").as_int();
+
+        //Param for fps
+        int p_fps = this->get_parameter("fps").as_int();
 
         //Params for filter/algorithm configuration
         int p_image_detail_enhance_level = this->get_parameter("image_detail_enhance_level").as_int();
@@ -68,7 +73,7 @@ class ParamConfig : public rclcpp::Node
 
         // Serial port parameters (Read from params above)
         UartConDevParams_t param = {};
-        char uart_data[20];
+        char uart_data[100];
         std::strcpy(uart_data, p_uart_data.c_str());        // Serial Port
         param.baudrate = p_baudrate;                        // Baudrate
         
@@ -115,6 +120,10 @@ class ParamConfig : public rclcpp::Node
         ret = basic_auto_ffc_status_get(ircmd_handle, &ffc_stat);
         printf("FFC STATUS: %d\n", ffc_stat);
         
+        int fps;
+        ret = adv_output_frame_rate_get(ircmd_handle, &fps);
+        printf("FPS: %d\n", fps);
+
         int current_detail_enhance_level;
         ret = basic_current_detail_enhance_level_get(ircmd_handle, &current_detail_enhance_level);
         printf("DETAIL ENCHANCE LEVEL: %d\n", current_detail_enhance_level);
@@ -143,11 +152,19 @@ class ParamConfig : public rclcpp::Node
         // --------- SETTING PARAMETERS ---------
 
         if (p_set_params) {
+
+            // ret = adv_basic_reset_to_normal(ircmd_handle);
+
             printf("SETTING PARAMETERS: \n");
             if (p_set_shutter){
                 // Auto Shutter Status
                 printf("- Auto Shutter Status\n");
                 ret = basic_auto_ffc_status_set(ircmd_handle, p_auto_ffc_shutter);
+            }
+            if (p_set_fps) {
+                // fps (DOES NOT WORK CORRECTLY)
+                printf("- FPS\n");
+                ret = adv_output_frame_rate_set(ircmd_handle, p_fps);
             }
             if (p_set_filter){
                 // Detail Enhance Level
@@ -182,6 +199,10 @@ class ParamConfig : public rclcpp::Node
             ret = basic_auto_ffc_status_get(ircmd_handle, &ffc_stat);
             printf("FFC STATUS: %d\n", ffc_stat);
             
+            int fps;
+            ret = adv_output_frame_rate_get(ircmd_handle, &fps);
+            printf("FPS: %d\n", fps);
+
             int current_detail_enhance_level;
             ret = basic_current_detail_enhance_level_get(ircmd_handle, &current_detail_enhance_level);
             printf("DETAIL ENCHANCE LEVEL: %d\n", current_detail_enhance_level);
@@ -205,7 +226,6 @@ class ParamConfig : public rclcpp::Node
             int current_image_scene_mode;
             ret = basic_current_image_scene_mode_get(ircmd_handle, &current_image_scene_mode);
             printf("IMAGE SCENE MODE: %d\n", current_image_scene_mode);
-
 
             if (p_set_shutter && p_save_params){
                     printf("SAVING SHUTTER CONFIGURATION\n");
