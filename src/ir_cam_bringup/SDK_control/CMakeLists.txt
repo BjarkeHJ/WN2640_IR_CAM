@@ -22,7 +22,7 @@ ament_target_dependencies(ir_cmd_uart rclcpp)
 
 set_target_properties(
   ir_cmd_uart PROPERTIES
-  INSTALL_RPATH "$ORIGIN/../lib/${PROJECT_NAME}"
+  INSTALL_RPATH "$ORIGIN/../../lib/${PROJECT_NAME}"
   INSTALL_RPATH_USE_LINK_PATH TRUE
 )
 
