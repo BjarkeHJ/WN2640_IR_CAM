@@ -1,14 +1,12 @@
 include_directories(SDK/drivers)
 include_directories(SDK/interface)
 
-# message("Building x64")
+message("Building x64")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -s")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s")
 
-# set(CMAKE_C_COMPILER /usr/bin/gcc-11)
-# set(CMAKE_CXX_COMPILER /usr/bin/g++-11)
-set(CMAKE_C_COMPILER /usr/bin/gcc-7)
-set(CMAKE_CXX_COMPILER /usr/bin/g++7)
+set(CMAKE_C_COMPILER /usr/bin/gcc-11)
+set(CMAKE_CXX_COMPILER /usr/bin/g++-11)
 
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/SDK/drivers)
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/SDK/interface)

@@ -5,7 +5,7 @@ ir_cmd_uart:
     set_fps: true                       #set fps parameter
     set_filter: true                    #set filter parameters / algorithm parameters
     save_params: true                   #save shutter config
-    uart_data: "/dev/ttyHS1"            #The board UART peripherial (/dev/ttyUSB0 for uart-usb adapter)
+    uart_data: "/dev/ttyUSB0"           #The UART peripherial (/dev/ttyUSB0 for uart-usb adapter)
     baudrate: 115200                    #baudrate for communication channel
     auto_ffc_shutter: 1                 #auto shutter status
     fps: 30                             #30 default
