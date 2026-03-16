@@ -1,6 +1,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <cstring>
 #include "libircmd.h"
 #include "libiruart.h"
 #include <rclcpp/rclcpp.hpp>
