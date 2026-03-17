@@ -24,10 +24,8 @@ CMakeLists.txt.user*
 
 *.o
 *.os
-# *.a
 *.la
 *.lo
-# *.so
 *.dylib
 moc_*
 
