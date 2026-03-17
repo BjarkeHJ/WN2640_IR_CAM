@@ -1,16 +1,20 @@
 import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, TimerAction
 from launch.substitutions import LaunchConfiguration
-from launch_ros.actions import ComposableNodeContainer
+from launch_ros.actions import ComposableNodeContainer, Node
 from launch_ros.descriptions import ComposableNode
-
-
 
 def generate_launch_description():
     #     pkg_share = get_package_share_directory('aerial_tn')
     #     default_params = os.path.join(pkg_share, 'config', 'ircam_params.yaml')
+
+    cmd_config = os.path.join(
+        get_package_share_directory('ircam_driver'),
+        'config',
+        'config_ir_params.yaml',
+    )
 
     return LaunchDescription([
         DeclareLaunchArgument('device',   default_value='/dev/video2'),
@@ -58,5 +62,18 @@ def generate_launch_description():
                     ],
                 ),
             ],
+        ),
+
+        TimerAction(
+            period=5.0, # seconds delay for bringup code to run
+            actions=[
+                Node(
+                    package='ircam_driver',
+                    executable='ircam_cmd_uart',
+                    name='ircam_cmd_uart',
+                    output='screen',
+                    parameters=[cmd_config]
+                ),
+            ]
         ),
     ])
