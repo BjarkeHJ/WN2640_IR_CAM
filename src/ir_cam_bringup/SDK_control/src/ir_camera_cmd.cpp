@@ -15,7 +15,8 @@ public:
         this->declare_parameter("set_filter", true);                //set filter parameters / algorithm parameters
         this->declare_parameter("save_params",false);               //save shutter config
         
-        this->declare_parameter("uart_data", "/dev/ttyHS1");        // The IR cameras USB port
+        this->declare_parameter("uart_usb", "/dev/ttyUSB0");        // The uart-usb adapter
+        this->declare_parameter("uart_onboard", "/dev/ttyHS1");     // Onboard uart periph
         this->declare_parameter("baudrate", 115200);                //baudrate for communication channel
         
         this->declare_parameter("auto_ffc_shutter", 0);             //baudrate for communication channel
@@ -36,7 +37,8 @@ public:
         bool p_save_params = this->get_parameter("save_params").as_bool();
 
         //Params for getting camera control
-        std::string p_uart_data = this->get_parameter("uart_data").as_string();
+        std::string p_uart_usb = this->get_parameter("uart_usb").as_string();
+        std::string p_uart_onboard = this->get_parameter("uart_onboard").as_string();
         int p_baudrate = this->get_parameter("baudrate").as_int();
 
         //Params for shutter configuration
@@ -71,7 +73,11 @@ public:
         // Serial port parameters (Read from params above)
         UartConDevParams_t param = {};
         char uart_data[100];
-        std::strcpy(uart_data, p_uart_data.c_str());        // Serial Port
+        #ifdef USE_ONBOARD_UART
+            std::strcpy(uart_data, p_uart_onboard.c_str());        // onboard uart peripheral
+        #else
+            std::strcpy(uart_data, p_uart_usb.c_str());        // usb-uart adapter for pc
+        #endif 
         param.baudrate = p_baudrate;                        // Baudrate
         
         // Create control handle
@@ -130,7 +136,7 @@ public:
         printf("IMAGE NOISE REDUCTION LEVEL: %d\n", current_image_noise_reduction_level);
 
         int current_time_noise_reduction_level;
-        ret = basic_time_noise_reduce_level_get(ircmd_handle, &current_image_noise_reduction_level);
+        ret = basic_time_noise_reduce_level_get(ircmd_handle, &current_time_noise_reduction_level);
         printf("TIME NOISE REDUCTION LEVEL: %d\n", current_time_noise_reduction_level);
 
         int current_space_noise_reduction_level;
@@ -209,7 +215,7 @@ public:
             printf("IMAGE NOISE REDUCTION LEVEL: %d\n", current_image_noise_reduction_level);
 
             int current_time_noise_reduction_level;
-            ret = basic_time_noise_reduce_level_get(ircmd_handle, &current_image_noise_reduction_level);
+            ret = basic_time_noise_reduce_level_get(ircmd_handle, &current_time_noise_reduction_level);
             printf("TIME NOISE REDUCTION LEVEL: %d\n", current_time_noise_reduction_level);
 
             int current_space_noise_reduction_level;
