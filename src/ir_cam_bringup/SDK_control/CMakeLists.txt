@@ -22,9 +22,9 @@ add_executable(
   src/ir_camera_cmd.cpp   
 )
 
-ament_target_dependencies(ir_cmd_uart rclcpp)
-
 target_link_libraries(ir_cmd_uart ircam ircmd iruart m)
+
+ament_target_dependencies(ir_cmd_uart rclcpp)
 
 set_target_properties(
   ir_cmd_uart PROPERTIES
@@ -38,7 +38,7 @@ install(
 )
 
 install(
-  DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SDK/drivers/x86_64/
+  DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SDK/drivers/${CMAKE_CURRENT_SOURCE_DIR}/
   DESTINATION lib/${PROJECT_NAME}
   FILES_MATCHING PATTERN "*.so*"
 )
