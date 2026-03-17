@@ -1,9 +1,7 @@
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -s")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s")
 
-include_directories(SDK/interface)
-
-message(${CMAKE_SYSTEM_PROCESSOR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/SDK/interface)
 
 if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
   message("Building x86_64")
@@ -14,8 +12,6 @@ if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
 elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
   message("Building aarch64")
   include_directories(${CMAKE_CURRENT_SOURCE_DIR}/SDK/drivers/aarch64)
-  set(CMAKE_C_COMPILER /usr/bin/gcc-7)
-  set(CMAKE_CXX_COMPILER /usr/bin/g++-7)
   link_directories(${CMAKE_CURRENT_SOURCE_DIR}/SDK/drivers/aarch64)
 endif()
 
