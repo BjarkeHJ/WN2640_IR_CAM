@@ -72,14 +72,16 @@ public:
 
         // Serial port parameters (Read from params above)
         UartConDevParams_t param = {};
-        char uart_data[100];
+        char uart_data[23];
         #ifdef USE_ONBOARD_UART
             std::strcpy(uart_data, p_uart_onboard.c_str());        // onboard uart peripheral
         #else
             std::strcpy(uart_data, p_uart_usb.c_str());        // usb-uart adapter for pc
         #endif 
         param.baudrate = p_baudrate;                        // Baudrate
-        
+
+        printf("Using Uart: %s\n", uart_data);
+
         // Create control handle
         ir_control_handle_create(&ir_control_handle);
 
