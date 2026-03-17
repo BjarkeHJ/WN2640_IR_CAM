@@ -9,7 +9,7 @@ if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
   link_directories(${CMAKE_CURRENT_SOURCE_DIR}/SDK/drivers/x86_64)
 elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
   message("Building aarch64")
-  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/SDK/drivers/aarch6)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/SDK/drivers/aarch64)
   link_directories(${CMAKE_CURRENT_SOURCE_DIR}/SDK/drivers/aarch64)
 endif()
 
@@ -36,7 +36,7 @@ install(
 )
 
 install(
-  DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SDK/drivers/${CMAKE_CURRENT_SOURCE_DIR}/
+  DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SDK/drivers/${CMAKE_SYSTEM_PROCESSOR}/
   DESTINATION lib/${PROJECT_NAME}
   FILES_MATCHING PATTERN "*.so*"
 )
