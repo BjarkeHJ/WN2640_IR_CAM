@@ -16,10 +16,22 @@ add_subdirectory(./ircam_control/)
 # IRCAM STREAM: V4L2 -> ROS2 Driver + H264 Encoding
 add_subdirectory(./ircam_stream/)
 
+rclcpp_components_register_node(ircam_component
+  PLUGIN "ircam_stream::IrCameraComponent"
+  EXECUTABLE ircam_component_node
+)
+
+rclcpp_components_register_node(ircam_h264_component
+  PLUGIN "ircam_stream::IrCameraH264Component"
+  EXECUTABLE ircam_h264_component_node
+)
+
 # Install Launch and Config
 install(
   DIRECTORY launch config
   DESTINATION share/${PROJECT_NAME}
 )
+
+ament_export_targets(export_ircam_driver)
 
 ament_package()

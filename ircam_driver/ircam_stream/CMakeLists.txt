@@ -33,13 +33,9 @@ ament_target_dependencies(${IR_COMP}
     sensor_msgs
 )
 
-rclcpp_components_register_node(${IR_COMP}
-    PLUGIN "ircam_stream::IrCameraComponent"
-    EXECUTABLE ircam_component_node
-)
-
 install(
   TARGETS ${IR_COMP}
+  EXPORT export_ircam_driver
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
@@ -69,13 +65,9 @@ target_link_libraries(${IR_ENC_COMP}
   PkgConfig::SWSCALE
 )
 
-rclcpp_components_register_node(${IR_ENC_COMP}
-  PLUGIN "ircam_stream::IrCameraH264Component"
-  EXECUTABLE ircam_h264_component_node
-)
-
 install(
   TARGETS ${IR_ENC_COMP}
+  EXPORT export_ircam_driver
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
