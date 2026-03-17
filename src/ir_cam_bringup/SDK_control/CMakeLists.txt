@@ -20,9 +20,12 @@ target_include_directories(ir_cmd_uart PRIVATE
   ${SDK_DRIVER_DIR}
 )
 
-link_directories(${SDK_DRIVER_DIR})
-
-target_link_libraries(ir_cmd_uart ircam ircmd iruart m)
+target_link_libraries(ir_cmd_uart
+  ${SDK_DRIVER_DIR}/libircam.so
+  ${SDK_DRIVER_DIR}/libircmd.so
+  ${SDK_DRIVER_DIR}/libiruart.so
+  m
+)
 
 ament_target_dependencies(ir_cmd_uart rclcpp)
 
