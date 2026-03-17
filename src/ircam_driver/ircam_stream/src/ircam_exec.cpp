@@ -1,4 +1,4 @@
-#include "ircam/ircam_node.hpp"
+#include "ircam_node.hpp"
 
 int main(int argc, char** argv) {
     rclcpp::init(argc, argv);
@@ -7,7 +7,7 @@ int main(int argc, char** argv) {
     options.use_intra_process_comms(false); // standalone = inter-process
 
     try {
-        auto node = std::make_shared<ir_v4l2_camera::IrCameraNode>(options);
+        auto node = std::make_shared<ircam_stream::IrCameraNode>(options);
         rclcpp::spin(node);
     }
     catch (const std::exception& e) {

@@ -25,8 +25,8 @@ def generate_launch_description():
             composable_node_descriptions=[
 
                 ComposableNode(
-                    package='aerial_tn',
-                    plugin='ir_v4l2_camera::IrCameraComponent',
+                    package='ircam_driver',
+                    plugin='ircam_stream::IrCameraComponent',
                     name='ircam',
                     parameters=[{
                         'device':       LaunchConfiguration('device'),
@@ -44,8 +44,8 @@ def generate_launch_description():
                 ),
 
                 ComposableNode(
-                    package='aerial_tn',
-                    plugin='ir_v4l2_camera::IrCameraH264Component',
+                    package='ircam_driver',
+                    plugin='ircam_stream::IrCameraH264Component',
                     name='ircam_h264',
                     parameters=[{
                         'input_topic':    '/ircam/raw_image',

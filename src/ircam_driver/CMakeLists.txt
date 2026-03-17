@@ -10,16 +10,16 @@ find_package(rclcpp REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(sensor_msgs REQUIRED)
 
-
-install(
-  DIRECTORY launch config
-  DESTINATION share/${PROJECT_NAME}
-)
-
 # IRCAM CONTROL: UART SDK Control
 add_subdirectory(./ircam_control/)
 
 # IRCAM STREAM: V4L2 -> ROS2 Driver + H264 Encoding
 add_subdirectory(./ircam_stream/)
+
+# Install Launch and Config
+install(
+  DIRECTORY launch config
+  DESTINATION share/${PROJECT_NAME}
+)
 
 ament_package()

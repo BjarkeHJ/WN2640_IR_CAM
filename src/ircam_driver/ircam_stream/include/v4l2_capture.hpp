@@ -6,7 +6,7 @@
 #include <vector>
 #include <functional>
 
-namespace ir_v4l2_camera {
+namespace ircam_stream {
 
 struct MmapBuffer {
     void* start = nullptr;
@@ -74,6 +74,6 @@ private:
     static int xioctl(int fd, unsigned long request, void* arg);
 };
 
-} // namespace ir_v4l2_camera
+} // namespace ircam_stream
 
 #endif // V4L2_CAPTURE_HPP_

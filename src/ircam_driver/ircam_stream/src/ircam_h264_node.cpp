@@ -1,6 +1,6 @@
-#include "ircam/ircam_h264_node.hpp"
+#include "ircam_h264_node.hpp"
 
-namespace ir_v4l2_camera {
+namespace ircam_stream {
 
 // Encoder
 void H264Encoder::init(int width, int height, AVPixelFormat src_fmt, int bitrate, const std::string& preset) {
@@ -152,4 +152,4 @@ void IrcamH264Republisher::image_callback(const sensor_msgs::msg::Image::SharedP
     image_h264_pub_->publish(std::move(out));
 }
 
-} // namespace ir_v4l2_camera
+} // namespace ircam_stream

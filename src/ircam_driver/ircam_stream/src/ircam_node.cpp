@@ -1,4 +1,4 @@
-#include "ircam/ircam_node.hpp"
+#include "ircam_node.hpp"
 
 #include <chrono>
 #include <cstring>
@@ -10,9 +10,9 @@
 
 using namespace std::chrono_literals;
 
-namespace ir_v4l2_camera {
+namespace ircam_stream {
 
-IrCameraNode::IrCameraNode(const rclcpp::NodeOptions& options) : Node("ir_v4l2_camera", options) {
+IrCameraNode::IrCameraNode(const rclcpp::NodeOptions& options) : Node("ircam_streamer", options) {
     declare_params();
     read_params();
 
@@ -191,4 +191,4 @@ void IrCameraNode::diagnostics_callback() {
     }
 }
 
-} // namespace ir_v4l2_camera
+} // namespace ircam_stream

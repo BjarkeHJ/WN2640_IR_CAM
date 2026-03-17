@@ -17,7 +17,7 @@ extern "C" {
 #include <string>
 #include <vector>
 
-namespace ir_v4l2_camera {
+namespace ircam_stream {
 
 // ---------------------------------------------------------------------------
 // Helper: map ROS image encoding string → FFmpeg pixel format
@@ -97,6 +97,6 @@ private:
 };
 
 
-} // namespace ir_v4l2_camera
+} // namespace ircam_stream
 
 #endif // IRCAM_H264_ENC_HPP_

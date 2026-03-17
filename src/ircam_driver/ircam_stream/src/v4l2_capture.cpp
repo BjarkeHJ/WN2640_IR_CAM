@@ -1,4 +1,4 @@
-#include "ircam/v4l2_capture.hpp"
+#include "v4l2_capture.hpp"
 
 #include <cerrno>
 #include <cstring>
@@ -9,7 +9,7 @@
 #include <sys/select.h>
 #include <unistd.h>
 
-namespace ir_v4l2_camera {
+namespace ircam_stream {
 
 int V4L2Capture::xioctl(int fd, unsigned long request, void* arg) {
     int r;
@@ -218,4 +218,4 @@ V4L2Capture::~V4L2Capture() {
     close();
 }
 
-} // namespace ir_v4l2_camera
+} // namespace ircam_stream

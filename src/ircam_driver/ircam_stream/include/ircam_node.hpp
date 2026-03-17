@@ -10,9 +10,9 @@
 #include <sensor_msgs/msg/image.hpp>
 #include <sensor_msgs/msg/camera_info.hpp>
 
-#include "ircam/v4l2_capture.hpp"
+#include "v4l2_capture.hpp"
 
-namespace ir_v4l2_camera {
+namespace ircam_stream {
 
 enum class OutputEncoding {
     YUYV, // RAW YUYV 4:2:2 (2 bytes/pixel)
@@ -50,7 +50,7 @@ private:
     rclcpp::Time last_diag_time_;
 };
 
-} // namespace ir_v4l2_camera
+} // namespace ircam_stream
 
 
 #endif
