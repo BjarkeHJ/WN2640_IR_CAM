@@ -1,34 +1,32 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <cstring>
 #include "libircmd.h"
 #include "libiruart.h"
 #include <rclcpp/rclcpp.hpp>
 
-class ParamConfig : public rclcpp::Node
-{
-    public: ParamConfig(): Node("Ir_param_config_node")
-    {
-
-        // --------- READ AND GET PARAMETERS ---------
-
-        this->declare_parameter("set_params", true);               // if set to false, the parameters will only be displayed
-        this->declare_parameter("set_shutter", true);              // set auto shutter parameters
-        this->declare_parameter("set_fps", true);              // set fps parameter
-        this->declare_parameter("set_filter", true);               //set filter parameters / algorithm parameters
-        this->declare_parameter("save_params",false);              //save shutter config
+class ParamConfig : public rclcpp::Node {
+public: 
+    ParamConfig(): Node("Ir_param_config_node") {
+        this->declare_parameter("set_params", true);                // if set to false, the parameters will only be displayed
+        this->declare_parameter("set_shutter", true);               // set auto shutter parameters
+        this->declare_parameter("set_fps", true);                   // set fps parameter
+        this->declare_parameter("set_filter", true);                //set filter parameters / algorithm parameters
+        this->declare_parameter("save_params",false);               //save shutter config
         
-        this->declare_parameter("uart_data", "/dev/ttyHS1");       // The IR cameras USB port
+        this->declare_parameter("uart_usb", "/dev/ttyUSB0");        // The uart-usb adapter
+        this->declare_parameter("uart_onboard", "/dev/ttyHS1");     // Onboard uart periph
         this->declare_parameter("baudrate", 115200);                //baudrate for communication channel
         
-        this->declare_parameter("auto_ffc_shutter", 0);                 //baudrate for communication channel
+        this->declare_parameter("auto_ffc_shutter", 0);             //baudrate for communication channel
         
         this->declare_parameter("fps", 30);                         // frame rate (30 or 60)
         this->declare_parameter("image_detail_enhance_level", 50);  //detail enhance level (0-100)
         this->declare_parameter("image_noise_reduction_level", 50); //detail enhance level (0-100)
         this->declare_parameter("time_noise_reduction_level", 50);  //time noise reduction level (0-100)
         this->declare_parameter("space_noise_reduction_level", 50); //space noise reduction level (0-100)
-        this->declare_parameter("edge_enhance_level", 0);          //edge enhancement level (0-100)
+        this->declare_parameter("edge_enhance_level", 0);           //edge enhancement level (0-100)
         this->declare_parameter("image_scene_mode", 0);             //image scene mode (0 is default mode)
 
         // Params for setting          
@@ -39,7 +37,8 @@ class ParamConfig : public rclcpp::Node
         bool p_save_params = this->get_parameter("save_params").as_bool();
 
         //Params for getting camera control
-        std::string p_uart_data = this->get_parameter("uart_data").as_string();
+        std::string p_uart_usb = this->get_parameter("uart_usb").as_string();
+        std::string p_uart_onboard = this->get_parameter("uart_onboard").as_string();
         int p_baudrate = this->get_parameter("baudrate").as_int();
 
         //Params for shutter configuration
@@ -73,10 +72,16 @@ class ParamConfig : public rclcpp::Node
 
         // Serial port parameters (Read from params above)
         UartConDevParams_t param = {};
-        char uart_data[100];
-        std::strcpy(uart_data, p_uart_data.c_str());        // Serial Port
+        char uart_data[23];
+        #ifdef USE_ONBOARD_UART
+            std::strcpy(uart_data, p_uart_onboard.c_str());        // onboard uart peripheral
+        #else
+            std::strcpy(uart_data, p_uart_usb.c_str());        // usb-uart adapter for pc
+        #endif 
         param.baudrate = p_baudrate;                        // Baudrate
-        
+
+        printf("Using Uart: %s\n", uart_data);
+
         // Create control handle
         ir_control_handle_create(&ir_control_handle);
 
@@ -133,7 +138,7 @@ class ParamConfig : public rclcpp::Node
         printf("IMAGE NOISE REDUCTION LEVEL: %d\n", current_image_noise_reduction_level);
 
         int current_time_noise_reduction_level;
-        ret = basic_time_noise_reduce_level_get(ircmd_handle, &current_image_noise_reduction_level);
+        ret = basic_time_noise_reduce_level_get(ircmd_handle, &current_time_noise_reduction_level);
         printf("TIME NOISE REDUCTION LEVEL: %d\n", current_time_noise_reduction_level);
 
         int current_space_noise_reduction_level;
@@ -212,7 +217,7 @@ class ParamConfig : public rclcpp::Node
             printf("IMAGE NOISE REDUCTION LEVEL: %d\n", current_image_noise_reduction_level);
 
             int current_time_noise_reduction_level;
-            ret = basic_time_noise_reduce_level_get(ircmd_handle, &current_image_noise_reduction_level);
+            ret = basic_time_noise_reduce_level_get(ircmd_handle, &current_time_noise_reduction_level);
             printf("TIME NOISE REDUCTION LEVEL: %d\n", current_time_noise_reduction_level);
 
             int current_space_noise_reduction_level;
