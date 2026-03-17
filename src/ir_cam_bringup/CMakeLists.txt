@@ -16,20 +16,21 @@ install(
 
 # UART SDK Control
 add_subdirectory(./SDK_control/)
-set_target_properties(
-  ir_cmd_uart PROPERTIES
-  INSTALL_RPATH "$ORIGIN/../../lib/${PROJECT_NAME}"
-  INSTALL_RPATH_USE_LINK_PATH TRUE
-)
-install(
-  TARGETS ir_cmd_uart
-  RUNTIME DESTINATION lib/${PROJECT_NAME}
-)
-install(
-  DIRECTORY ./SDK_control/SDK/drivers/
-  DESTINATION lib/${PROJECT_NAME}
-  FILES_MATCHING PATTERN "*.so*"
-)
+
+# set_target_properties(
+#   ir_cmd_uart PROPERTIES
+#   INSTALL_RPATH "$ORIGIN/../../lib/${PROJECT_NAME}"
+#   INSTALL_RPATH_USE_LINK_PATH TRUE
+# )
+# install(
+#   TARGETS ir_cmd_uart
+#   RUNTIME DESTINATION lib/${PROJECT_NAME}
+# )
+# install(
+#   DIRECTORY ./SDK_control/SDK/drivers/
+#   DESTINATION lib/${PROJECT_NAME}
+#   FILES_MATCHING PATTERN "*.so*"
+# )
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

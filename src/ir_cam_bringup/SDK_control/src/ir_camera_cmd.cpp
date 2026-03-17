@@ -5,30 +5,26 @@
 #include "libiruart.h"
 #include <rclcpp/rclcpp.hpp>
 
-class ParamConfig : public rclcpp::Node
-{
-    public: ParamConfig(): Node("Ir_param_config_node")
-    {
-
-        // --------- READ AND GET PARAMETERS ---------
-
-        this->declare_parameter("set_params", true);               // if set to false, the parameters will only be displayed
-        this->declare_parameter("set_shutter", true);              // set auto shutter parameters
-        this->declare_parameter("set_fps", true);              // set fps parameter
-        this->declare_parameter("set_filter", true);               //set filter parameters / algorithm parameters
-        this->declare_parameter("save_params",false);              //save shutter config
+class ParamConfig : public rclcpp::Node {
+public: 
+    ParamConfig(): Node("Ir_param_config_node") {
+        this->declare_parameter("set_params", true);                // if set to false, the parameters will only be displayed
+        this->declare_parameter("set_shutter", true);               // set auto shutter parameters
+        this->declare_parameter("set_fps", true);                   // set fps parameter
+        this->declare_parameter("set_filter", true);                //set filter parameters / algorithm parameters
+        this->declare_parameter("save_params",false);               //save shutter config
         
-        this->declare_parameter("uart_data", "/dev/ttyHS1");       // The IR cameras USB port
+        this->declare_parameter("uart_data", "/dev/ttyHS1");        // The IR cameras USB port
         this->declare_parameter("baudrate", 115200);                //baudrate for communication channel
         
-        this->declare_parameter("auto_ffc_shutter", 0);                 //baudrate for communication channel
+        this->declare_parameter("auto_ffc_shutter", 0);             //baudrate for communication channel
         
         this->declare_parameter("fps", 30);                         // frame rate (30 or 60)
         this->declare_parameter("image_detail_enhance_level", 50);  //detail enhance level (0-100)
         this->declare_parameter("image_noise_reduction_level", 50); //detail enhance level (0-100)
         this->declare_parameter("time_noise_reduction_level", 50);  //time noise reduction level (0-100)
         this->declare_parameter("space_noise_reduction_level", 50); //space noise reduction level (0-100)
-        this->declare_parameter("edge_enhance_level", 0);          //edge enhancement level (0-100)
+        this->declare_parameter("edge_enhance_level", 0);           //edge enhancement level (0-100)
         this->declare_parameter("image_scene_mode", 0);             //image scene mode (0 is default mode)
 
         // Params for setting          
