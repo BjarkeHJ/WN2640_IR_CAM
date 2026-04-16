@@ -18,7 +18,7 @@ IrCameraNode::IrCameraNode(const rclcpp::NodeOptions& options) : Node("ircam_str
 
     // auto qos = rclcpp::QoS(queue_depth_).reliability(rclcpp::ReliabilityPolicy::BestEffort).durability(rclcpp::DurabilityPolicy::Volatile);
     auto qos = rclcpp::SensorDataQoS();
-    image_pub_ = this->create_publisher<sensor_msgs::msg::Image>("/ircam/raw_image", qos);
+    image_pub_ = this->create_publisher<sensor_msgs::msg::Image>(output_topic_, qos);
 
     // Open device
     if (!capture_.open(capture_cfg_)) {
@@ -97,6 +97,7 @@ IrCameraNode::~IrCameraNode() {
 }
 
 void IrCameraNode::declare_params() {
+    this->declare_parameter<std::string>("output_topic", "/ircam/raw_image");
     this->declare_parameter<std::string>("device", "/dev/video2");
     this->declare_parameter<int>("width", 640);
     this->declare_parameter<int>("height", 512);
@@ -116,6 +117,7 @@ void IrCameraNode::read_params() {
 
     frame_id_ = this->get_parameter("frame_id").as_string();
     queue_depth_ = this->get_parameter("queue_depth").as_int();
+    output_topic_ = this->get_parameter("output_topic").as_string();
 
     auto enc_str = this->get_parameter("encoding").as_string();
     if (enc_str == "yuv422" || enc_str == "yuyv") output_encoding_ = OutputEncoding::YUYV;

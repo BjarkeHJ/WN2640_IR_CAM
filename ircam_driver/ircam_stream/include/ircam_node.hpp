@@ -41,7 +41,7 @@ private:
 
     std::atomic<bool> running_{false};
     std::thread capture_thread_;
-
+    std::string output_topic_;
     std::string frame_id_;
     int queue_depth_ = 2;
 
