@@ -152,8 +152,9 @@ void IrCameraNode::publish_yuyv(const uint8_t* data, size_t size, uint64_t ts_us
     auto msg = std::make_unique<sensor_msgs::msg::Image>();
     msg->data.resize(capture_.width() * capture_.height() * 2);
 
-    msg->header.stamp.sec = static_cast<int32_t>(ts_us / 1'000'000ULL);
-    msg->header.stamp.nanosec = static_cast<uint32_t>((ts_us % 1'000'000ULL) * 1000ULL);
+    // msg->header.stamp.sec = static_cast<int32_t>(ts_us / 1'000'000ULL);
+    // msg->header.stamp.nanosec = static_cast<uint32_t>((ts_us % 1'000'000ULL) * 1000ULL);
+    msg->header.stamp = this->get_clock()->now();
     msg->header.frame_id = frame_id_;
 
     msg->width = static_cast<uint32_t>(capture_.width());

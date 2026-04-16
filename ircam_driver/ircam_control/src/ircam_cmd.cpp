@@ -8,7 +8,7 @@
 
 class ParamConfig : public rclcpp::Node {
 public: 
-    ParamConfig(): Node("Ir_param_config_node") {
+    ParamConfig(): Node("ircam_cmd_uart") {
         this->declare_parameter("set_params", true);                // if set to false, the parameters will only be displayed
         this->declare_parameter("set_shutter", true);               // set auto shutter parameters
         this->declare_parameter("set_fps", true);                   // set fps parameter
@@ -27,7 +27,7 @@ public:
         this->declare_parameter("time_noise_reduction_level", 50);  //time noise reduction level (0-100)
         this->declare_parameter("space_noise_reduction_level", 50); //space noise reduction level (0-100)
         this->declare_parameter("edge_enhance_level", 0);           //edge enhancement level (0-100)
-        this->declare_parameter("image_scene_mode", 0);             //image scene mode (0 is default mode)
+        this->declare_parameter("image_scene_mode", 2);             //image scene mode (0 is default mode)
 
         // Params for setting          
         bool p_set_params = this->get_parameter("set_params").as_bool();

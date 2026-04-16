@@ -13,7 +13,7 @@ def generate_launch_description():
     cmd_config = os.path.join(
         get_package_share_directory('ircam_driver'),
         'config',
-        'config_ir_params.yaml',
+        'config_ir_params.yaml'
     )
 
     return LaunchDescription([
