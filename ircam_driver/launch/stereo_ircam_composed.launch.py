@@ -57,7 +57,7 @@ def generate_launch_description():
                     parameters=[{
                         'input_topic':    '/ircam_narrow/raw_image',
                         'output_topic':   '/ircam_narrow/h264',
-                        'bitrate':        2000000, # 10 Mbps for narrow FOV camera
+                        'bitrate':        5000000, # 5 Mbps for narrow FOV camera
                         'preset':         'ultrafast',
                     }],
                     extra_arguments=[
@@ -101,7 +101,7 @@ def generate_launch_description():
                     parameters=[{
                         'input_topic':    '/ircam_wide/raw_image',
                         'output_topic':   '/ircam_wide/h264',
-                        'bitrate':        2000000, # 10 Mbps for wide FOV camera
+                        'bitrate':        5000000, # 5 Mbps for wide FOV camera
                         'preset':         'ultrafast',
                     }],
                     extra_arguments=[

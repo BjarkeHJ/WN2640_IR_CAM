@@ -94,6 +94,14 @@ private:
     int bitrate_;
     std::string preset_;
     bool logged_encoder_ = false;
+
+    // Diagnostics
+    void diagnostics_callback();
+    rclcpp::TimerBase::SharedPtr diag_timer_;
+    rclcpp::Time last_diag_time_{0, 0, RCL_ROS_TIME};
+    uint64_t frames_encoded_ = 0;
+    uint64_t last_diag_frames_ = 0;
+    size_t bytes_since_diag_ = 0;
 };
 
 

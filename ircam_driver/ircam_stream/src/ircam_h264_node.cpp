@@ -1,5 +1,8 @@
 #include "ircam_h264_node.hpp"
 
+#include <chrono>
+using namespace std::chrono_literals;
+
 namespace ircam_stream {
 
 // Encoder
@@ -21,15 +24,15 @@ void H264Encoder::init(int width, int height, AVPixelFormat src_fmt, int bitrate
     ctx->width = width;
     ctx->height = height;
     ctx->pix_fmt = AV_PIX_FMT_YUV420P;
-    ctx->bit_rate = bitrate;
-    ctx->gop_size = 30;
+    ctx->bit_rate = 0; // bitrate; 0 means "let encoder decide" (which is usually good for CRF-based presets)
+    ctx->gop_size = 10;
     ctx->max_b_frames = 0;
     ctx->time_base = AVRational{1, 30};
     ctx->framerate = AVRational{30, 1};
 
     av_opt_set(ctx->priv_data, "preset", preset.c_str(), 0);
     av_opt_set(ctx->priv_data, "tune", "zerolatency", 0);
-
+    av_opt_set(ctx->priv_data, "crf",    "23", 0); // default is 23, higher means more compression (and lower quality)
     if (avcodec_open2(ctx, codec, nullptr) < 0) {
         avcodec_free_context(&ctx);
         throw std::runtime_error("avcodec_open2 failed");
@@ -110,6 +113,10 @@ IrcamH264Republisher::IrcamH264Republisher(const rclcpp::NodeOptions& options) :
     // auto pub_qos = rclcpp::QoS(30).reliability(rclcpp::ReliabilityPolicy::Reliable).durability(rclcpp::DurabilityPolicy::TransientLocal);
     // auto pub_qos = rclcpp::QoS(10).reliability(rclcpp::ReliabilityPolicy::BestEffort).durability(rclcpp::DurabilityPolicy::Volatile);
     image_h264_pub_ = create_publisher<sensor_msgs::msg::CompressedImage>(out_topic, pub_qos);
+
+    last_diag_time_ = this->now();
+    diag_timer_ = this->create_wall_timer(
+        2s, std::bind(&IrcamH264Republisher::diagnostics_callback, this));
 }
 
 void IrcamH264Republisher::image_callback(const sensor_msgs::msg::Image::SharedPtr msg) {
@@ -150,6 +157,28 @@ void IrcamH264Republisher::image_callback(const sensor_msgs::msg::Image::SharedP
     out->format = "h264";
     out->data = std::move(nal);
     image_h264_pub_->publish(std::move(out));
+
+    frames_encoded_++;
+    bytes_since_diag_ += nal.size();
+}
+
+void IrcamH264Republisher::diagnostics_callback() {
+    auto now_t = this->now();
+    double dt = (now_t - last_diag_time_).seconds();
+    if (dt < 0.01) return;
+
+    uint64_t frames = frames_encoded_;
+    double fps = static_cast<double>(frames - last_diag_frames_) / dt;
+    double bitrate_kbps = static_cast<double>(bytes_since_diag_) * 8.0 / dt / 1000.0;
+
+    last_diag_frames_ = frames;
+    bytes_since_diag_ = 0;
+    last_diag_time_ = now_t;
+
+    RCLCPP_INFO(get_logger(),
+        "FPS: %.1f  |  Encoded: %lu  bitrate: %.1f kbps",
+        fps, frames, bitrate_kbps
+    );
 }
 
 } // namespace ircam_stream
