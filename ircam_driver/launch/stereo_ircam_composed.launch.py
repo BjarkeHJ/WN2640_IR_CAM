@@ -33,7 +33,7 @@ def generate_launch_description():
                 ComposableNode(
                     package='ircam_driver',
                     plugin='ircam_stream::IrCameraComponent',
-                    name='ircam',
+                    name='ircam_narrow',
                     parameters=[{
                         'output_topic':   '/ircam_narrow/raw_image',
                         'device':       LaunchConfiguration('device_1'),
@@ -53,12 +53,12 @@ def generate_launch_description():
                 ComposableNode(
                     package='ircam_driver',
                     plugin='ircam_stream::IrCameraH264Component',
-                    name='ircam_h264',
+                    name='ircam_h264_narrow',
                     parameters=[{
                         'input_topic':    '/ircam_narrow/raw_image',
                         'output_topic':   '/ircam_narrow/h264',
-                        'bitrate':        5000000, # 5 Mbps for narrow FOV camera
-                        'preset':         'ultrafast',
+                        'preset':         'superfast',
+                        'crf':            23,
                     }],
                     extra_arguments=[
                         {'use_intra_process_comms': True},
@@ -77,7 +77,7 @@ def generate_launch_description():
                 ComposableNode(
                     package='ircam_driver',
                     plugin='ircam_stream::IrCameraComponent',
-                    name='ircam',
+                    name='ircam_wide',
                     parameters=[{
                         'output_topic':   '/ircam_wide/raw_image',
                         'device':       LaunchConfiguration('device_2'),
@@ -97,12 +97,12 @@ def generate_launch_description():
                 ComposableNode(
                     package='ircam_driver',
                     plugin='ircam_stream::IrCameraH264Component',
-                    name='ircam_h264',
+                    name='ircam_h264_wide',
                     parameters=[{
                         'input_topic':    '/ircam_wide/raw_image',
                         'output_topic':   '/ircam_wide/h264',
-                        'bitrate':        5000000, # 5 Mbps for wide FOV camera
-                        'preset':         'ultrafast',
+                        'preset':         'superfast',
+                        'crf':            23,
                     }],
                     extra_arguments=[
                         {'use_intra_process_comms': True},

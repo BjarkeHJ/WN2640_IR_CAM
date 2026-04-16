@@ -54,7 +54,7 @@ public:
      * pixel format changes.
      */
     void init(int width, int height, AVPixelFormat src_fmt,
-              int bitrate, const std::string & preset);
+              const std::string & preset, int crf);
     
     /**
      * Encode one raw frame and return the concatenated NAL-unit bytes.
@@ -91,8 +91,8 @@ private:
 
     H264Encoder encoder_;
 
-    int bitrate_;
     std::string preset_;
+    int crf_ = 23;
     bool logged_encoder_ = false;
 
     // Diagnostics

@@ -54,8 +54,8 @@ def generate_launch_description():
                     parameters=[{
                         'input_topic':    '/ircam/raw_image',
                         'output_topic':   '/ircam/h264',
-                        'bitrate':        2000000,
-                        'preset':         'ultrafast',
+                        'preset':         'superfast',
+                        'crf':            23, # constraint rate factor for quality control (lower is better quality, 23 is default)
                     }],
                     extra_arguments=[
                         {'use_intra_process_comms': True},

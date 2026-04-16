@@ -6,7 +6,7 @@ using namespace std::chrono_literals;
 namespace ircam_stream {
 
 // Encoder
-void H264Encoder::init(int width, int height, AVPixelFormat src_fmt, int bitrate, const std::string& preset) {
+void H264Encoder::init(int width, int height, AVPixelFormat src_fmt, const std::string& preset, int crf) {
     if (codec_ctx_ && width == width_ && height == height_ && src_fmt == src_fmt_)
         return;  // already set up for this geometry
 
@@ -32,7 +32,7 @@ void H264Encoder::init(int width, int height, AVPixelFormat src_fmt, int bitrate
 
     av_opt_set(ctx->priv_data, "preset", preset.c_str(), 0);
     av_opt_set(ctx->priv_data, "tune", "zerolatency", 0);
-    av_opt_set(ctx->priv_data, "crf",    "23", 0); // default is 23, higher means more compression (and lower quality)
+    av_opt_set(ctx->priv_data, "crf", std::to_string(crf).c_str(), 0);
     if (avcodec_open2(ctx, codec, nullptr) < 0) {
         avcodec_free_context(&ctx);
         throw std::runtime_error("avcodec_open2 failed");
@@ -91,19 +91,19 @@ void H264Encoder::shutdown() {
 // ROS2 Encoder Node republish
 IrcamH264Republisher::IrcamH264Republisher(const rclcpp::NodeOptions& options) : Node("ircam_h264_republisher", options) {
     // ---- Declare parameters ------------------------------------------
-    declare_parameter<int>("bitrate",    2'000'000);  // 2 Mbit/s default
     declare_parameter<std::string>("preset", "ultrafast");
+    declare_parameter<int>("crf", 23);
     declare_parameter<std::string>("input_topic",  "/ircam/raw_image");
     declare_parameter<std::string>("output_topic", "/ircam/h264");
 
-    bitrate_    = get_parameter("bitrate").as_int();
     preset_     = get_parameter("preset").as_string();
+    crf_        = get_parameter("crf").as_int();
     auto in_topic  = get_parameter("input_topic").as_string();
     auto out_topic = get_parameter("output_topic").as_string();
 
     RCLCPP_INFO(get_logger(),
-        "Encoding %s → %s  [bitrate=%d, preset=%s]",
-        in_topic.c_str(), out_topic.c_str(), bitrate_, preset_.c_str());
+        "Encoding %s → %s  [preset=%s, crf=%d]",
+        in_topic.c_str(), out_topic.c_str(), preset_.c_str(), crf_);
 
     image_raw_sub_ = create_subscription<sensor_msgs::msg::Image>(
         in_topic, rclcpp::SensorDataQoS(),
@@ -129,7 +129,7 @@ void IrcamH264Republisher::image_callback(const sensor_msgs::msg::Image::SharedP
 
     // init (will only do once)
     try {
-        encoder_.init(msg->width, msg->height, src_fmt, bitrate_, preset_);
+        encoder_.init(msg->width, msg->height, src_fmt, preset_, crf_);
     }
     catch (const std::exception& e) {
         RCLCPP_ERROR(get_logger(), "Encoder init failed: %s", e.what());
@@ -152,14 +152,14 @@ void IrcamH264Republisher::image_callback(const sensor_msgs::msg::Image::SharedP
     }
 
     // Publish
+    frames_encoded_++;
+    bytes_since_diag_ += nal.size();
+
     auto out = std::make_unique<sensor_msgs::msg::CompressedImage>();
     out->header = msg->header;
     out->format = "h264";
     out->data = std::move(nal);
     image_h264_pub_->publish(std::move(out));
-
-    frames_encoded_++;
-    bytes_since_diag_ += nal.size();
 }
 
 void IrcamH264Republisher::diagnostics_callback() {
