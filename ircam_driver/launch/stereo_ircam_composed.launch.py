@@ -57,7 +57,7 @@ def generate_launch_description():
                     parameters=[{
                         'input_topic':    '/ircam_narrow/raw_image',
                         'output_topic':   '/ircam_narrow/h264',
-                        'preset':         'superfast',
+                        'preset':         'ultrafast',
                         'crf':            23,
                     }],
                     extra_arguments=[
@@ -101,7 +101,7 @@ def generate_launch_description():
                     parameters=[{
                         'input_topic':    '/ircam_wide/raw_image',
                         'output_topic':   '/ircam_wide/h264',
-                        'preset':         'superfast',
+                        'preset':         'ultrafast',
                         'crf':            23,
                     }],
                     extra_arguments=[
