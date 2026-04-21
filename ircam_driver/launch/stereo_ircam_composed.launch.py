@@ -10,10 +10,15 @@ def generate_launch_description():
     #     pkg_share = get_package_share_directory('aerial_tn')
     #     default_params = os.path.join(pkg_share, 'config', 'ircam_params.yaml')
 
-    cmd_config = os.path.join(
+    cmd_config_1 = os.path.join(
         get_package_share_directory('ircam_driver'),
         'config',
-        'config_ir_params.yaml',
+        'stereo_config_ir_1.yaml',
+    )
+    cmd_config_2 = os.path.join(
+        get_package_share_directory('ircam_driver'),
+        'config',
+        'stereo_config_ir_2.yaml',
     )
 
     return LaunchDescription([
@@ -119,19 +124,19 @@ def generate_launch_description():
                     executable='ircam_cmd_uart',
                     name='ircam_cmd_uart',
                     output='screen',
-                    parameters=[cmd_config]
+                    parameters=[cmd_config_1]
                 ),
             ]
         ),
         TimerAction(
-            period=30.0, # seconds delay for bringup code to run
+            period=5.0, # seconds delay for bringup code to run
             actions=[
                 Node(
                     package='ircam_driver',
                     executable='ircam_cmd_uart',
                     name='ircam_cmd_uart',
                     output='screen',
-                    parameters=[cmd_config]
+                    parameters=[cmd_config_2]
                 ),
             ]
         ),

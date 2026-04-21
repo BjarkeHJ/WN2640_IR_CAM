@@ -1,0 +1,20 @@
+ircam_cmd_uart:
+  ros__parameters:
+    set_params: true                    #enable writing of params. If false, the current parameters are simply printed.
+    set_shutter: true                   #set auto shutter parameters
+    set_fps: true                       #set fps parameter
+    set_filter: true                    #set filter parameters / algorithm parameters
+    save_params: true                   #save shutter config
+    uart_usb: "/dev/ttyUSB0"             #The UART peripherial (/dev/ttyUSB0 for uart-usb adapter)
+    uart_onboard: "/dev/ttyHS2"         #The UART peripherial (/dev/ttyH1 onboard periph)
+    baudrate: 115200                    #baudrate for communication channel
+    auto_ffc_shutter: 0                 #auto shutter status
+    fps: 30                             #30 or 60 only
+    image_detail_enhance_level: 50
+    image_noise_reduction_level: 50
+    time_noise_reduction_level: 50
+    space_noise_reduction_level: 50
+    edge_enhance_level: 0
+    image_scene_mode: 0
+
+
