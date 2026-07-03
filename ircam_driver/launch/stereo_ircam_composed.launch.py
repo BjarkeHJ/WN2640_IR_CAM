@@ -63,7 +63,7 @@ def generate_launch_description():
                         'input_topic':    '/ircam_narrow/raw_image',
                         'output_topic':   '/ircam_narrow/h264',
                         'preset':         'ultrafast',
-                        'crf':            23,
+                        'crf':            25, # constraint rate factor for quality control (lower is better quality, 23 is default)
                     }],
                     extra_arguments=[
                         {'use_intra_process_comms': True},
@@ -107,7 +107,7 @@ def generate_launch_description():
                         'input_topic':    '/ircam_wide/raw_image',
                         'output_topic':   '/ircam_wide/h264',
                         'preset':         'ultrafast',
-                        'crf':            23,
+                        'crf':            25, # constraint rate factor for quality control (lower is better quality, 23 is default)
                     }],
                     extra_arguments=[
                         {'use_intra_process_comms': True},
@@ -122,7 +122,7 @@ def generate_launch_description():
                 Node(
                     package='ircam_driver',
                     executable='ircam_cmd_uart',
-                    name='ircam_cmd_uart',
+                    name='ircam_cmd_uart_1',
                     output='screen',
                     parameters=[cmd_config_1]
                 ),
@@ -134,7 +134,7 @@ def generate_launch_description():
                 Node(
                     package='ircam_driver',
                     executable='ircam_cmd_uart',
-                    name='ircam_cmd_uart',
+                    name='ircam_cmd_uart_2',
                     output='screen',
                     parameters=[cmd_config_2]
                 ),

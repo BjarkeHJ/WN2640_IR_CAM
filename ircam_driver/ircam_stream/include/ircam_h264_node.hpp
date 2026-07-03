@@ -22,7 +22,7 @@ namespace ircam_stream {
 // ---------------------------------------------------------------------------
 // Helper: map ROS image encoding string → FFmpeg pixel format
 // ---------------------------------------------------------------------------
-static AVPixelFormat ros_encoding_to_av(const std::string & enc)
+inline AVPixelFormat ros_encoding_to_av(const std::string & enc)
 {
     if (enc == "rgb8")             return AV_PIX_FMT_RGB24;
     if (enc == "bgr8")             return AV_PIX_FMT_BGR24;

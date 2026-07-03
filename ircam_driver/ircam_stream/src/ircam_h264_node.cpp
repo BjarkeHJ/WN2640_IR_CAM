@@ -30,6 +30,7 @@ void H264Encoder::init(int width, int height, AVPixelFormat src_fmt, const std::
     ctx->time_base = AVRational{1, 30};
     ctx->framerate = AVRational{30, 1};
 
+    ctx->thread_count = 1;
     av_opt_set(ctx->priv_data, "preset", preset.c_str(), 0);
     av_opt_set(ctx->priv_data, "tune", "zerolatency", 0);
     av_opt_set(ctx->priv_data, "crf", std::to_string(crf).c_str(), 0);
@@ -110,8 +111,6 @@ IrcamH264Republisher::IrcamH264Republisher(const rclcpp::NodeOptions& options) :
         std::bind(&IrcamH264Republisher::image_callback, this, std::placeholders::_1));
 
         auto pub_qos = rclcpp::QoS(30).reliability(rclcpp::ReliabilityPolicy::Reliable).durability(rclcpp::DurabilityPolicy::Volatile);
-    // auto pub_qos = rclcpp::QoS(30).reliability(rclcpp::ReliabilityPolicy::Reliable).durability(rclcpp::DurabilityPolicy::TransientLocal);
-    // auto pub_qos = rclcpp::QoS(10).reliability(rclcpp::ReliabilityPolicy::BestEffort).durability(rclcpp::DurabilityPolicy::Volatile);
     image_h264_pub_ = create_publisher<sensor_msgs::msg::CompressedImage>(out_topic, pub_qos);
 
     last_diag_time_ = this->now();

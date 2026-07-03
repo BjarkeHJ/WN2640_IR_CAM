@@ -55,7 +55,7 @@ def generate_launch_description():
                         'input_topic':    '/ircam/raw_image',
                         'output_topic':   '/ircam/h264',
                         'preset':         'ultrafast',
-                        'crf':            23, # constraint rate factor for quality control (lower is better quality, 23 is default)
+                        'crf':            25, # constraint rate factor for quality control (lower is better quality, 23 is default)
                     }],
                     extra_arguments=[
                         {'use_intra_process_comms': True},

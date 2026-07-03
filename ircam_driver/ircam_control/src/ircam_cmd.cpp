@@ -52,7 +52,6 @@ public:
         int p_image_noise_reduction_level = this->get_parameter("image_noise_reduction_level").as_int();
         int p_time_noise_reduction_level = this->get_parameter("time_noise_reduction_level").as_int();
         int p_space_noise_reduction_level = this->get_parameter("space_noise_reduction_level").as_int();
-        int p_edge_enhance_level = this->get_parameter("edge_enhance_level").as_int();
         int p_image_scene_mode = this->get_parameter("image_scene_mode").as_int();
         
 

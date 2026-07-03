@@ -67,11 +67,6 @@ IrCameraNode::IrCameraNode(const rclcpp::NodeOptions& options) : Node("ircam_str
                 "Could not set SCHED_FIFO on capture thread - Falling back to default scheduling"
             );
         }
-        // pin to core 6 (adjust?)
-        cpu_set_t cpuset;
-        CPU_ZERO(&cpuset);
-        CPU_SET(6, &cpuset);
-        pthread_setaffinity_np(handle, sizeof(cpu_set_t), &cpuset);
     }
     #endif
 
@@ -141,14 +136,14 @@ void IrCameraNode::capture_loop() {
             continue;
         }
 
-        publish_yuyv(frame, bytes_used, ts_us);
+        publish_yuyv(frame, bytes_used);
 
         // return the buffer to V4L2 after copying data out
         capture_.release_frame();
     }
 }
 
-void IrCameraNode::publish_yuyv(const uint8_t* data, size_t size, uint64_t ts_us) {   
+void IrCameraNode::publish_yuyv(const uint8_t* data, size_t size) {
     auto msg = std::make_unique<sensor_msgs::msg::Image>();
     msg->data.resize(capture_.width() * capture_.height() * 2);
 

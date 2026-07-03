@@ -29,7 +29,7 @@ private:
     void declare_params();
     void read_params();
     void capture_loop();
-    void publish_yuyv(const uint8_t* data, size_t size, uint64_t ts_us);
+    void publish_yuyv(const uint8_t* data, size_t size);
     void diagnostics_callback();
 
     V4L2Capture capture_;
