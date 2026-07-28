@@ -116,28 +116,28 @@ def generate_launch_description():
             ],
         ),
 
-        TimerAction(
-            period=5.0, # seconds delay for bringup code to run
-            actions=[
-                Node(
-                    package='ircam_driver',
-                    executable='ircam_cmd_uart',
-                    name='ircam_cmd_uart_1',
-                    output='screen',
-                    parameters=[cmd_config_1]
-                ),
-            ]
-        ),
-        TimerAction(
-            period=5.0, # seconds delay for bringup code to run
-            actions=[
-                Node(
-                    package='ircam_driver',
-                    executable='ircam_cmd_uart',
-                    name='ircam_cmd_uart_2',
-                    output='screen',
-                    parameters=[cmd_config_2]
-                ),
-            ]
-        ),
+        #TimerAction(
+        #    period=5.0, # seconds delay for bringup code to run
+        #    actions=[
+        #        Node(
+        #            package='ircam_driver',
+        #            executable='ircam_cmd_uart',
+        #            name='ircam_cmd_uart_1',
+        #            output='screen',
+        #            parameters=[cmd_config_1]
+        #        ),
+        #    ]
+        #),
+        #TimerAction(
+        #    period=5.0, # seconds delay for bringup code to run
+        #    actions=[
+        #        Node(
+        #            package='ircam_driver',
+        #            executable='ircam_cmd_uart',
+        #            name='ircam_cmd_uart_2',
+        #            output='screen',
+        #            parameters=[cmd_config_2]
+        #        ),
+        #    ]
+        #),
     ])
