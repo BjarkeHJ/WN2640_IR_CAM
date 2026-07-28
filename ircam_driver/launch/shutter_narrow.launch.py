@@ -14,7 +14,7 @@ def generate_launch_description():
     node = Node(
         package='ircam_driver',
         executable='ircam_cmd_uart',
-        name='ircam_cmd_uart',
+        name='ircam_cmd_uart_2',
         output='screen',
         parameters=[config]
     )
