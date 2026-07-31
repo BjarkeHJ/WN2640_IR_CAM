@@ -8,13 +8,13 @@ def generate_launch_description():
     config = os.path.join(
         get_package_share_directory('ircam_driver'),
         'config',
-        'stereo_config_ir_2.yaml',
+        'config_ir_params.yaml',
     )
 
     node = Node(
         package='ircam_driver',
         executable='ircam_cmd_uart',
-        name='ircam_cmd_uart_2',
+        name='ircam_cmd_uart',
         output='screen',
         parameters=[config]
     )
