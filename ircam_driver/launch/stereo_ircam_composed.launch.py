@@ -1,10 +1,20 @@
 import os
+import sys
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, TimerAction
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import ComposableNodeContainer, Node
 from launch_ros.descriptions import ComposableNode
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from usb_video_resolver import resolve_video_device
+
+# USB VID:PID of each physical IR camera unit (fixed in firmware, unlike
+# /dev/videoN which is assigned by USB probe order and can move between
+# boots when two identical-class cameras are attached).
+NARROW_CAM_VID_PID = ('3474', '43e1')
+WIDE_CAM_VID_PID   = ('3474', '43e2')
 
 def generate_launch_description():
     #     pkg_share = get_package_share_directory('aerial_tn')
@@ -21,9 +31,12 @@ def generate_launch_description():
         'stereo_config_ir_2.yaml',
     )
 
+    default_device_1 = resolve_video_device(*NARROW_CAM_VID_PID)
+    default_device_2 = resolve_video_device(*WIDE_CAM_VID_PID)
+
     return LaunchDescription([
-        DeclareLaunchArgument('device_1',   default_value='/dev/video2'),
-        DeclareLaunchArgument('device_2',   default_value='/dev/video4'),
+        DeclareLaunchArgument('device_1', default_value=default_device_1),
+        DeclareLaunchArgument('device_2', default_value=default_device_2),
         DeclareLaunchArgument('encoding', default_value='yuyv'),
 
         ComposableNodeContainer(
